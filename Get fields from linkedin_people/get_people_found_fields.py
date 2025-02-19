@@ -17,6 +17,12 @@ conn = psycopg2.connect(
 
 c = conn.cursor()
 
+def replace_https_with_http(url):
+    if url.startswith("https://"):
+        return url.replace("https://", "http://")
+    return url
+
+
 def get_fields_of_all_found_people():
     query = """
         SELECT name, experience, position, url, id_company, fecha_insert, city, country_code
@@ -86,7 +92,7 @@ def get_fields_of_all_found_people():
                 "email": None,
                 "email_status": "unguessed",
                 "telefono": None,
-                "linkedin": result[3],
+                "linkedin": replace_https_with_http(result[3]),
                 "company_id": result[4],
                 "cargo_id": None,
                 "roket_status": "ING",
